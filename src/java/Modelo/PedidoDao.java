@@ -23,15 +23,14 @@ public class PedidoDao {
     PreparedStatement ps;
     ResultSet rs;
     int r;
-    
-    
-    public String GenerarNumPedido(){
-        String numPed ="";
-        String sql = "select max(numero_pedido) from pedido";
-        String salida= null;
-        int inc = 0;
+
+    public String GenerarNumPedido() {
+        String numPed = "";
+        String sql = "select count(*) from pedido";
+        String salida = null;
+        int inc;
         String valor = null;
-         try {
+        try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -39,17 +38,15 @@ public class PedidoDao {
                 numPed = rs.getString(1);
             }
             inc = Integer.parseInt(numPed);
-            inc = inc +1;
-          
+            inc = inc + 1;
+
             salida = String.format("%05d", inc);
-            
-            
-            
+
         } catch (SQLException e) {
         }
-         
-         return salida;
-        
+
+        return salida;
+
     }
 
     public String IdPedido() {
@@ -71,7 +68,7 @@ public class PedidoDao {
 
     public int guardarPedido(Pedido pe) {
 
-        String sql ="insert into pedido(fecha,monto,id_empleado,id_cliente,numero_pedido,estado) values(?,?,?,?,?,?)";
+        String sql = "insert into pedido(fecha,monto,id_empleado,id_cliente,numeroserie,estado,pago) values(?,?,?,?,?,?,?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
@@ -81,6 +78,8 @@ public class PedidoDao {
             ps.setInt(4, pe.getIdcliente());
             ps.setString(5, pe.getNumpedido());
             ps.setString(6, pe.getEstado());
+
+            ps.setString(7, pe.getPago());
             ps.executeUpdate();
         } catch (SQLException e) {
         }
@@ -88,14 +87,14 @@ public class PedidoDao {
         return r;
 
     }
-    
-    public int guardarDetalle(Pedido pe){
-            String sql = "insert into detallepedido(id_pedido,id_producto,cantidad,precio_pedido) values(?,?,?,?)";
+
+    public int guardarDetalle(Pedido pe) {
+        String sql = "insert into detallepedido(id_pedido,id_producto,cantidad,precio_pedido) values(?,?,?,?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
             ps.setInt(1, pe.getIdpedido());
-            ps.setInt(2,pe.getIdpro());
+            ps.setInt(2, pe.getIdpro());
             ps.setInt(3, pe.getCantidad());
             ps.setDouble(4, pe.getPrecio());
             ps.executeUpdate();
@@ -103,7 +102,7 @@ public class PedidoDao {
         }
 
         return r;
- 
+
     }
 
 }

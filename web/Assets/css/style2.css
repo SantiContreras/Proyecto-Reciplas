@@ -1,0 +1,25 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14/11/2020, 19:40:55
+    Author     : santi
+*/
+
+body{
+   font-family: 'Poppins', sans-serif;
+}
+
+label{
+    color: #002163;
+}
+
+ .parte03 select {
+    padding: 10rem;
+    border-bottom: 1rem;
+    background-color: #81F79F;
+    text-align: center;
+    color: #000000;
+}

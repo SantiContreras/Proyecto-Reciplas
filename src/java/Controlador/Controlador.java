@@ -52,6 +52,7 @@ public class Controlador extends HttpServlet {
     double Subtotal;
     double TotalPagar;
     String fecha;
+    String Pago;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -124,13 +125,14 @@ public class Controlador extends HttpServlet {
                     // guardamos el pedido 
                    
                
-                    
+                    Pago = request.getParameter("txtpago");
                     pe.setIdcliente(cli.getId_cliente());
                     pe.setIdempleado(em.getId_empleado());
                     pe.setNumpedido(String.valueOf(numeropedido));
                     pe.setFecha(fecha);
                     pe.setMonto(TotalPagar);
                     pe.setEstado("1");
+                    pe.setPago(Pago);
                     pedao.guardarPedido(pe);
                     //guardamos el detalle del pedido 
                     idp = Integer.parseInt(pedao.IdPedido());
@@ -161,6 +163,7 @@ public class Controlador extends HttpServlet {
                     break;
 
                 default:
+                    pe = new Pedido();
                     item = 0; // reiniciamos el item para los proximos pedidos de la lista
                     TotalPagar = 0.0; // reiciamos el total para los proximos pedidos
                     fecha = String.valueOf(LocalDate.now()); // obtenemos la fecha en formato local

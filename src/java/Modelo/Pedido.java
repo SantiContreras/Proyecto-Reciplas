@@ -27,11 +27,15 @@ public class Pedido {
     Double monto;
     Double subtotal;
     String estado;
+    String pago;
+
+   
+
 
     public Pedido() {
     }
 
-    public Pedido(int idpedido, int item, int idcliente, int idpro, int idempleado, String Numpedido, String descripcion, String fecha, Double precio, int cantidad, Double monto, Double subtotal, String estado) {
+    public Pedido(int idpedido, int item, int idcliente, int idpro, int idempleado, String Numpedido, String descripcion, String fecha, Double precio, int cantidad, Double monto, Double subtotal, String estado, String pago) {
         this.idpedido = idpedido;
         this.item = item;
         this.idcliente = idcliente;
@@ -45,6 +49,7 @@ public class Pedido {
         this.monto = monto;
         this.subtotal = subtotal;
         this.estado = estado;
+        this.pago = pago;
     }
     
     
@@ -151,6 +156,15 @@ public class Pedido {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    
+    public String getPago() {
+        return pago;
+    }
+
+    public void setPago(String pago) {
+        this.pago = pago;
     }
     
 }
