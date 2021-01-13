@@ -5,6 +5,7 @@
 --%>
 
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="en">
@@ -19,15 +20,100 @@
         <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Staatliches&display=swap" rel="stylesheet">
-
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet"> 
         <title>Registro de pedido</title>
     </head>
 
 
     <body>
 
-        <h2 class="text-dark">Empleado en proceso de creacion</h2>
+        <div class="d-flex">
+            <!-- Esta es la columna donde se van a completar los datos del empleado-->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="Controlador?menu=Empleado" method="post">
+                            <div class="form-group">
+                                <label> dni</label>
+                                <input type="text" value="${empleado.getDni()}" name="txtdni" class="form-control" placeholder="15147889">
 
+
+                            </div>
+                            <div class="form-group">
+                                <label> nombre</label>
+                                <input type="text" value="${empleado.getNom()}" name="txtnombre" class="form-control" placeholder="Maria marta suarez">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> nick usuario</label>
+                                <input type="text" value="${empleado.getUser()}" name="txtusuario" class="form-control" placeholder="Marta014">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> correo electronico</label>
+                                <input type="text" value="${empleado.getEmail()}" name="txtcorreo" class="form-control" placeholder="Marta@gmail.com">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> estado</label>
+                                <input type="text" value="${empleado.getEs()}" name="txtestado" class="form-control">
+
+
+                            </div>
+                            <input type="submit" name="accion" value="Agregar" class="btn btn-info">
+                            <input type="submit" name="accion" value="Actualizar" class="btn btn-warning">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>nombre</th>
+                                    <th>dni</th>
+                                    <th>usuario</th>
+                                    <th>correo</th>
+                                    <th>estado</th>
+                                    <th>acciones</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="em" items="${empleados}">
+                                    <tr>
+                                        <td>${em.getId_empleado()}</td>
+                                        <td>${em.getNom()}</td>
+                                        <td>${em.getDni()}</td>
+                                        <td>${em.getUser()}</td>
+                                        <td>${em.getEmail()}</td>
+                                        <td>${em.getEs()}</td>
+                                        <td>
+                                            <a class="btn btn-warning" href="Controlador?menu=Empleado&accion=Editar&id=${em.getId_empleado()}">Editar</a>
+                                            <a class="btn btn-danger" href="Controlador?menu=Empleado&accion=Eliminar&id=${em.getId_empleado()}">Eliminar</a>
+                                        </td>
+
+                                    </tr>
+
+                                </c:forEach>  
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
 
         <!-- Optional JavaScript -->

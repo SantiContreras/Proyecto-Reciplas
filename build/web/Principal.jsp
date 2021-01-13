@@ -16,10 +16,11 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="Assets/css/style.css">
         <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Roboto:ital@1&family=Sansita+Swashed:wght@700&family=Source+Sans+Pro:wght@300;600&family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet"> 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <title>Dashboard de pedidos</title>
-        
+        <title>Panel de pedidos</title>
+
     </head>
     <body>
         <div class="d-flex ">
@@ -28,9 +29,9 @@
                     <h4 class="text-ligth">Reciplas</h4>
                 </div>
                 <div class="menu">
-                    <a href="Controlador?menu=Cliente" class="d-block text-ligth p-3" target="myframe"><i class="icon ion-md-contacts mr-2 lead"></i></i>Clientes</a>
-                    <a href="Controlador?menu=Empleado" class="d-block text-ligth p-3" target="myframe"><i class="icon ion-md-person  mr-2 lead"></i></i>Empleados</a>
-                    <a href="Controlador?menu=Producto" class="d-block text-ligth p-3" target="myframe"> <i class="fa fa-product-hunt" aria-hidden="true"></i> Productos</a>
+                    <a href="Controlador?menu=Cliente&accion=Listar" class="d-block text-ligth p-3" target="myframe"><i class="icon ion-md-contacts mr-2 lead"></i></i>Clientes</a>
+                    <a href="Controlador?menu=Empleado&accion=Listar" class="d-block text-ligth p-3" target="myframe"><i class="icon ion-md-person  mr-2 lead"></i></i>Empleados</a>
+                    <a href="Controlador?menu=Producto&accion=Listar" class="d-block text-ligth p-3" target="myframe"> <i class="fa fa-product-hunt" aria-hidden="true"></i> Productos</a>
                     <a href="Controlador?menu=NuevoPedido&accion=default" class="d-block text-ligth p-3" target="myframe"> <i class="fa fa-plus-circle mr-2" aria-hidden="true"></i>Nuevo Pedido</a>
                 </div>
             </div>

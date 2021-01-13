@@ -7,12 +7,15 @@ package Controlador;
 
 import Modelo.Cliente;
 import Modelo.ClienteDao;
+
 import Modelo.Empleado;
 import Modelo.EmpleadoDao;
 import Modelo.Pedido;
-import Modelo.PedidoDao;
+
 import Modelo.Producto;
 import Modelo.ProductoDao;
+
+import Modelo.Sistema;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -32,14 +35,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Controlador", urlPatterns = {"/Controlador"})
 public class Controlador extends HttpServlet {
 
+    ClienteDao clidao = new ClienteDao();
     Empleado em = new Empleado();
     EmpleadoDao edao = new EmpleadoDao();
     Cliente cli = new Cliente();
-    ClienteDao clidao = new ClienteDao();
-    Producto pro = new Producto();
     ProductoDao prodao = new ProductoDao();
+
+    Producto pro = new Producto();
+
     Pedido pe = new Pedido();
-    PedidoDao pedao = new PedidoDao();
+
+    Sistema sist = new Sistema();
 
     List<Pedido> lista = new ArrayList<>();
     int idp;
@@ -53,6 +59,8 @@ public class Controlador extends HttpServlet {
     double TotalPagar;
     String fecha;
     String Pago;
+    int ide;
+    int idc;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -72,17 +80,17 @@ public class Controlador extends HttpServlet {
                 case "BuscarCliente":
                     String dni = request.getParameter("dnicliente");
                     cli.setDni(dni);
-                    cli = clidao.Buscar(dni);
+                    cli = sist.Buscar(dni);
                     request.setAttribute("cli", cli);
                     request.setAttribute("numeropedido", numeropedido);
 
-                    request.setAttribute("fecha", fecha);// enviamos la solicitudad mediante estos parametros.
+                    request.setAttribute("fecha", fecha);// enviamos  estos parametros.
                     break;
 
                 case "BuscarProducto":
                     int idp = Integer.parseInt(request.getParameter("cod_pro"));
                     pro.setId_producto(idp);
-                    pro = prodao.buscar(idp);
+                    pro = sist.buscar(idp);
                     request.setAttribute("pro", pro);
                     request.setAttribute("cli", cli);
                     request.setAttribute("fecha", fecha);
@@ -104,7 +112,7 @@ public class Controlador extends HttpServlet {
                     precio = Double.parseDouble(request.getParameter("precio"));
                     cant = Integer.parseInt(request.getParameter("cantidad"));
                     Subtotal = precio * cant;
-                    pe = new Pedido(); // instancion un nuevo pedido para ir guardando en la lista
+                    pe = new Pedido(); // creamos un nuevo pedido para ir guardando en la lista
                     pe.setItem(item);
                     pe.setIdpro(cod_pro);
                     pe.setDescripcion(Descripcion);
@@ -123,8 +131,7 @@ public class Controlador extends HttpServlet {
 
                 case "GenerarPedido":
                     // guardamos el pedido 
-                   
-               
+
                     Pago = request.getParameter("txtpago");
                     pe.setIdcliente(cli.getId_cliente());
                     pe.setIdempleado(em.getId_empleado());
@@ -133,9 +140,9 @@ public class Controlador extends HttpServlet {
                     pe.setMonto(TotalPagar);
                     pe.setEstado("1");
                     pe.setPago(Pago);
-                    pedao.guardarPedido(pe);
+                    sist.guardarPedido(pe);
                     //guardamos el detalle del pedido 
-                    idp = Integer.parseInt(pedao.IdPedido());
+                    idp = Integer.parseInt(sist.IdPedido());
 
                     for (int i = 0; i < lista.size(); i++) {
                         pe = new Pedido();
@@ -143,22 +150,22 @@ public class Controlador extends HttpServlet {
                         pe.setIdpro(lista.get(i).getIdpro());
                         pe.setCantidad(lista.get(i).getCantidad());
                         pe.setPrecio(lista.get(i).getPrecio());
-                        pedao.guardarDetalle(pe);
+                        sist.guardarDetalle(pe);
                     }
 
                     //actualizamos el stock de productos
                     for (int i = 0; i < lista.size(); i++) {
 
-                        Producto pro = new Producto(); // instanciamos el objeto producto
+                        Producto prod = new Producto(); // instanciamos el objeto producto
                         cant = lista.get(i).getCantidad(); // obtenemos la cantidad del producto adquerido
                         int idpro = lista.get(i).getIdpro(); //buscamos el producto para actualizar stock
-                        ProductoDao AS = new ProductoDao(); // instanciamos ProductoDao que contiene el metodo actualizar
-                        pro = AS.buscar(idpro); //al objeto instanciado le asigno el producto buscado
-                        int sac = pro.getStock() - cant; // a la variable sac guardo la diferencia
+                        Sistema AS = new Sistema(); // instanciamos sistema que contiene el metodo actualizar
+                        prod = AS.buscar(idpro); //al objeto instanciado le asigno el producto buscado
+                        int sac = prod.getStock() - cant; // a la variable sac guardo la diferencia
+                        AS.actualizarstock(idpro, sac);
 
                     }
-                       lista = new ArrayList<>(); // una vs guardado pedido y detalle creamos una nueva lista para disponer la anterior
-                   
+                    lista = new ArrayList<>(); // una vs guardado pedido y detalle creamos una nueva lista para disponer la anterior
 
                     break;
 
@@ -168,9 +175,8 @@ public class Controlador extends HttpServlet {
                     TotalPagar = 0.0; // reiciamos el total para los proximos pedidos
                     fecha = String.valueOf(LocalDate.now()); // obtenemos la fecha en formato local
                     request.setAttribute("fecha", fecha);
-                     numeropedido = String.valueOf(pedao.GenerarNumPedido());
-                     
-                    
+                    numeropedido = String.valueOf(sist.GenerarNumPedido());
+
                     request.setAttribute("numeropedido", numeropedido);
 
                     request.getRequestDispatcher("RegistrarPedido.jsp").forward(request, response);
@@ -179,6 +185,172 @@ public class Controlador extends HttpServlet {
 
             request.getRequestDispatcher("RegistrarPedido.jsp").forward(request, response);
         }
+
+        if (menu.equals("Empleado")) {
+            switch (accion) {
+                case "Listar":
+                    List lista = edao.listar();
+                    request.setAttribute("empleados", lista);
+                    break;
+                case "Agregar":
+                    String nom = request.getParameter("txtnombre");
+                    String dni = request.getParameter("txtdni");
+                    String user = request.getParameter("txtusuario");
+                    String email = request.getParameter("txtcorreo");
+                    String estado = request.getParameter("txtestado");
+                    em.setDni(dni);
+                    em.setEmail(email);
+                    em.setEs(estado);
+                    em.setUser(user);
+                    em.setNom(nom);
+                    edao.agregar(em);
+                    request.getRequestDispatcher("Controlador?menu=Empleado&accion=Listar").forward(request, response);
+
+                    break;
+                case "Eliminar":
+                    ide = Integer.parseInt(request.getParameter("id"));
+                    edao.eliminar(ide);
+                    request.getRequestDispatcher("Controlador?menu=Empleado&accion=Listar").forward(request, response);
+                    break;
+                case "Editar":
+                    ide = Integer.parseInt(request.getParameter("id"));
+                    Empleado e = edao.listarId(ide);
+                    request.setAttribute("empleado", e);
+                    request.getRequestDispatcher("Controlador?menu=Empleado&accion=Listar").forward(request, response);
+                    break;
+                case "Actualizar":
+
+                    String dni1 = request.getParameter("txtdni");
+                    String nom1 = request.getParameter("txtnombre");
+                    String user1 = request.getParameter("txtusuario");
+                    String email1 = request.getParameter("txtcorreo");
+                    String es1 = request.getParameter("txtestado");
+                    em.setDni(dni1);
+                    em.setNom(nom1);
+                    em.setUser(user1);
+                    em.setEmail(email1);
+                    em.setEs(es1);
+                    em.setId_empleado(ide);
+                    edao.Actualizar(em);
+
+                    request.getRequestDispatcher("Controlador?menu=Empleado&accion=Listar").forward(request, response);
+
+                    break;
+            }
+            request.getRequestDispatcher("Empleado.jsp").forward(request, response);
+        }
+
+        if (menu.equals("Cliente")) {
+
+            switch (accion) {
+                case "Listar":
+                    List lista = clidao.Listar();
+                    request.setAttribute("cliente", lista);
+
+                    break;
+
+                case "Agregar":
+                    String dni = request.getParameter("txtdni");
+                    String tel = request.getParameter("txttelefono");
+                    String dir = request.getParameter("txtdireccion");
+                    String nom = request.getParameter("txtnombre");
+                    cli.setDni(dni);
+                    cli.setDir(dir);
+                    cli.setNom(nom);
+                    cli.setTel(tel);
+                    clidao.Agregar(cli);
+                    request.getRequestDispatcher("Controlador?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+
+                case "Eliminar":
+                    idc = Integer.parseInt(request.getParameter("id"));
+                    clidao.Eliminar(idc);
+                    request.getRequestDispatcher("Controlador?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+                case "Editar":
+                    idc = Integer.parseInt(request.getParameter("id"));
+                    Cliente cl = clidao.editar(idc);
+                    request.setAttribute("clientes", cl);
+                    request.getRequestDispatcher("Controlador?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+
+                case "Actualizar":
+
+                    String dni2 = request.getParameter("txtdni");
+                    String tel2 = request.getParameter("txttelefono");
+                    String dir2 = request.getParameter("txtdireccion");
+                    String nom2 = request.getParameter("txtnombre");
+                    cli.setDir(dir2);
+                    cli.setDni(dni2);
+                    cli.setNom(nom2);
+                    cli.setTel(tel2);
+                    cli.setId_cliente(idc);
+                    clidao.Actualizar(cli);
+                    request.getRequestDispatcher("Controlador?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+
+            }
+            request.getRequestDispatcher("cliente.jsp").forward(request, response);
+        }
+
+        if (menu.equals("Producto")) {
+
+            switch (accion) {
+                case "Listar":
+                    List lista = prodao.listar();
+                    request.setAttribute("productos", lista);
+
+                    break;
+
+                case "Agregar":
+                    String nom = request.getParameter("txtnombre");
+                    double pre = Double.parseDouble(request.getParameter("txtprecio"));
+                    int stock = Integer.parseInt(request.getParameter("txtstock"));
+                    String es = request.getParameter("txtestado");
+                   
+                    pro.setNombre(nom);
+                    pro.setPrecio(pre);
+                    pro.setStock(stock);
+                    pro.setEstado(es);
+                  
+                    prodao.agregar(pro);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+
+                    break;
+                case "Eliminar":
+                    idp = Integer.parseInt(request.getParameter("id"));
+                    prodao.eliminar(idp);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                case "Editar":
+                    idp = Integer.parseInt(request.getParameter("id"));
+                    Producto pr = prodao.listarId(idp);
+                    request.setAttribute("producto", pr);
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                case "Actualizar":
+
+                   
+                    String nom1 = request.getParameter("txtnombre");
+                    double pre1 = Double.parseDouble(request.getParameter("txtprecio"));
+                    int stock1 = Integer.parseInt(request.getParameter("txtstock"));
+                    String es1 = request.getParameter("txtestado");
+                    pro.setNombre(nom1);
+                    
+                    pro.setPrecio(pre1);
+                    pro.setStock(stock1);
+                    pro.setEstado(es1);
+                    pro.setId_producto(idp);
+                    prodao.Actualizar(pro);
+
+                    request.getRequestDispatcher("Controlador?menu=Producto&accion=Listar").forward(request, response);
+
+                    break;
+            }
+
+            request.getRequestDispatcher("Producto.jsp").forward(request, response);
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

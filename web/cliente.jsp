@@ -1,3 +1,4 @@
+
 <%-- 
     Document   : Producto
     Created on : 16/10/2020, 10:33:56
@@ -18,101 +19,78 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="Assets/css/style.css">
         <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Staatliches&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet"> 
-        <title>Registro de pedido</title>
+        
+         <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet"> 
+        <title>cliente</title>
     </head>
 
 
     <body>
 
         <div class="d-flex">
-            <!-- Esta es la columna donde se van a completar los datos del empleado-->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <form action="Controlador?menu=Empleado" method="post">
+                        <form action="Controlador?menu=Cliente" method="post">
                             <div class="form-group">
-                                <label> dni</label>
-                                <input type="text" value="${empleado.getDni()}" name="txtdni" class="form-control" placeholder="15147889">
-
-
+                                <label>Dni :</label>
+                                <input type="text" value="${clientes.getDni()}" name="txtdni" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label> nombre</label>
-                                <input type="text" value="${empleado.getNom()}" name="txtnombre" class="form-control" placeholder="Maria marta suarez">
-
-
+                                <label>Nombre :</label>
+                                <input type="text" value="${clientes.getNom()}" name="txtnombre" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label> nick usuario</label>
-                                <input type="text" value="${empleado.getUser()}" name="txtusuario" class="form-control" placeholder="Marta014">
-
-
+                                <label>Direccion :</label>
+                                <input type="text" value="${clientes.getDir()}" name="txtdireccion" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label> correo electronico</label>
-                                <input type="text" value="${empleado.getEmail()}" name="txtcorreo" class="form-control" placeholder="Marta@gmail.com">
-
-
+                                <label>Tel :</label>
+                                <input type="text" value="${clientes.getTel()}" name="txttelefono" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label> estado</label>
-                                <input type="text" value="${empleado.getEs()}" name="txtestado" class="form-control">
 
-
-                            </div>
                             <input type="submit" name="accion" value="Agregar" class="btn btn-info">
-                            <input type="submit" name="accion" value="Actualizar" class="btn btn-warning">
+                            <input type="submit" name="accion" value="Actualizar" class="btn btn-success">
                         </form>
                     </div>
-
                 </div>
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-10">
                 <div class="card">
                     <div class="card-body">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>nombre</th>
                                     <th>dni</th>
-                                    <th>usuario</th>
-                                    <th>correo</th>
-                                    <th>estado</th>
-                                    <th>acciones</th>
-
+                                    <th>nombre</th>
+                                    <th>direccion</th>
+                                    <th>telefono</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="em" items="${empleados}">
+                                <c:forEach var="cli" items="${cliente}">
                                     <tr>
-                                        <td>${em.getId_empleado()}</td>
-                                        <td>${em.getNom()}</td>
-                                        <td>${em.getDni()}</td>
-                                        <td>${em.getUser()}</td>
-                                        <td>${em.getEmail()}</td>
-                                        <td>${em.getEs()}</td>
+                                        <td>${cli.getId_cliente()}</td>
+                                        <td>${cli.getDni()}</td>
+                                        <td>${cli.getNom()}</td>
+                                        <td>${cli.getDir()}</td>
+                                        <td>${cli.getTel()}</td>
                                         <td>
-                                            <a class="btn btn-warning" href="Controlador?menu=Empleado&accion=Editar&id=${em.getId_empleado()}">Editar</a>
-                                            <a class="btn btn-danger" href="Controlador?menu=Empleado&accion=Eliminar&id=${em.getId_empleado()}">Eliminar</a>
+                                            <a class="btn btn-warning" href="Controlador?menu=Cliente&accion=Editar&id=${cli.getId_cliente()}">Editar</a>
+                                            <a class="btn btn-danger" href="Controlador?menu=Cliente&accion=Eliminar&id=${cli.getId_cliente()}">Eliminar</a>
                                         </td>
 
                                     </tr>
 
-                                </c:forEach>  
+                                </c:forEach>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
-
         </div>
 
 

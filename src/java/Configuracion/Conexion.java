@@ -17,7 +17,7 @@ public class Conexion {
     
     Connection con;
     String url="jdbc:mysql://localhost/reciplas";
-    String user="santiago";
+    String user="santi";
     String pass="17889";
     
     public Connection Conexion(){

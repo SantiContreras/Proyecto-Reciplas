@@ -4,6 +4,7 @@
     Author     : santi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 
     Document   : RegistrarPedido
     Created on : 13/10/2020, 19:24:40
@@ -25,13 +26,92 @@
         <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500&family=Staatliches&display=swap" rel="stylesheet">
 
-        <title>Registro de pedido</title>
+        <title>Productos</title>
     </head>
 
 
     <body>
 
-        <h2>Producto en proceso de creacion</h2>
+         <div class="d-flex">
+            <!-- Esta es la columna donde se van a completar los datos del empleado-->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="Controlador?menu=Producto" method="post">
+                            <div class="form-group">
+                                <label> nombre</label>
+                                <input type="text" value="${producto.getNombre()}" name="txtnombre" class="form-control" placeholder="">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> precio</label>
+                                <input type="text" value="${producto.getPrecio()}" name="txtprecio" class="form-control" placeholder="">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> stock</label>
+                                <input type="text" value="${producto.getStock()}" name="txtstock" class="form-control" placeholder="">
+
+
+                            </div>
+                            <div class="form-group">
+                                <label> estado</label>
+                                <input type="text" value="${producto.getEstado()}" name="txtestado" class="form-control" placeholder="">
+
+
+                            </div>
+                       
+                            <input type="submit" name="accion" value="Agregar" class="btn btn-info">
+                            <input type="submit" name="accion" value="Actualizar" class="btn btn-warning">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-hover table-info">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>nombre</th>
+                                    <th>precio</th>
+                                    <th>stock</th>
+                                    <th>estado</th>
+                                    
+                                    <th>acciones</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="pro" items="${productos}">
+                                    <tr>
+                                        <td>${pro.getId_producto()}</td>
+                                        <td>${pro.getNombre()}</td>
+                                        <td>${pro.getPrecio()}</td>
+                                        <td>${pro.getStock()}</td>
+                                        <td>${pro.getEstado()}</td>
+                                     
+                                        <td>
+                                            <a class="btn btn-warning" href="Controlador?menu=Producto&accion=Editar&id=${pro.getId_producto()}">Editar</a>
+                                            <a class="btn btn-danger" href="Controlador?menu=Producto&accion=Eliminar&id=${pro.getId_producto()}">Eliminar</a>
+                                        </td>
+
+                                    </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
 
 

@@ -53,7 +53,7 @@
 
 
                             <div class="form-group d-flex">
-                                <div class="col-sm-12 d-flex">
+                                <div class="col-sm-9 d-flex">
 
                                     <input type="text" name="dnicliente" value="${cli.getDni()}" class="form-control" placeholder="ingrese dni">
                                     <button type="text" name="accion" value="BuscarCliente" class="btn btn-outline-info">Buscar</button>
@@ -73,7 +73,7 @@
 
                             <div class="form-group d-flex">
 
-                                <div class="col-sm-12 d-flex">                                 
+                                <div class="col-sm-9 d-flex">                                 
                                     <input type="text" name="cod_pro" value="${pro.getId_producto()}" class="form-control" placeholder="ingrese codigo"> 
                                     <button type="text" name="accion" value="BuscarProducto" class="btn btn-outline-info">Buscar</button>
 
@@ -210,8 +210,8 @@
                                     Credito
                                 </label>
                             </div>
-                            
-                           
+
+
 
 
 
